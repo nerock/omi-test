@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package account;
+
+import "google/api/annotations.proto";
+
+option go_package = "pb/account";
+
+service Account {
+  rpc UpdateAccount(UpdateAccountRequest) returns (UpdateAccountResponse) {
+    option (google.api.http) = {
+      patch: "/account/{id}",
+      body: "*"
+    };
+  }
+}
+
+message UpdateAccountRequest {
+  string id = 1;
+  string name = 2;
+}
+
+message UpdateAccountResponse {
+  bool success = 1;
+}
