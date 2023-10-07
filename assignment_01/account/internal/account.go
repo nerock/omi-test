@@ -1,6 +1,12 @@
 package internal
 
-import "context"
+import (
+	"context"
+	"errors"
+	"fmt"
+)
+
+var ErrInvalidAccount = errors.New("invalid account")
 
 type Account struct {
 	ID   string
@@ -24,5 +30,17 @@ func NewAccountService(st storage) *accountService {
 }
 
 func (a *accountService) UpdateAccount(ctx context.Context, id, name string) (Account, error) {
-	return Account{}, nil
+	if id == "" || name == "" {
+		return Account{}, ErrInvalidAccount
+	}
+
+	acc := Account{
+		ID:   id,
+		Name: name,
+	}
+	if err := a.st.UpdateAccountByID(ctx, acc); err != nil {
+		return Account{}, fmt.Errorf("could not update account: %w", err)
+	}
+
+	return acc, nil
 }
