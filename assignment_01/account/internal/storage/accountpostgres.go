@@ -33,7 +33,7 @@ WHERE
 	if rows, err := res.RowsAffected(); err != nil {
 		return fmt.Errorf("invalid result: %w", err)
 	} else if rows != 1 {
-		return fmt.Errorf("invalid number of affected rows: %d", rows)
+		return internal.ErrInvalidAccount
 	}
 
 	return nil

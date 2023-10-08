@@ -35,8 +35,8 @@ func TestAccountPostgresStorage_UpdateAccountByID(t *testing.T) {
 			mock.ExpectExec(query).
 				WillReturnResult(sqlmock.NewResult(0, 0))
 
-			Convey("the storage should return an error", func() {
-				So(st.UpdateAccountByID(ctx, acc), ShouldNotBeNil)
+			Convey("the storage should return an invalid account error", func() {
+				So(st.UpdateAccountByID(ctx, acc), ShouldBeError, internal.ErrInvalidAccount)
 			})
 		})
 
