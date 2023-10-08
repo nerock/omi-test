@@ -4,6 +4,7 @@ proto:
 		--proto_path=. \
 		--go-grpc_out=. \
 		--grpc-gateway_out=. \
-		account.proto
+		account.proto \
+		events.proto
 
 	@ cp -r ./pb/ ../account/

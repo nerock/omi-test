@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package event;
+
+option go_package = "pb/event";
+
+enum EventType {
+  ACCOUNT_CREATED = 0;
+  ACCOUNT_UPDATED = 1;
+}
+
+message AuditEvent {
+  EventType event_type = 1;
+  string timestamp = 2;
+  string user_ip = 3;
+  string account_id = 4;
+}
