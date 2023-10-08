@@ -1,2 +1,3 @@
 CREATE DATABASE audit;
+CREATE DATABASE audit_test;
 CREATE DATABASE account;
