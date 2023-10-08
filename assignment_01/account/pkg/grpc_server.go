@@ -7,6 +7,7 @@ import (
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 	"net"
 )
 
@@ -28,6 +29,7 @@ func NewGrpcServer(port int, log *zap.Logger, svcs ...ServicePB) *GrpcServer {
 	for _, svc := range svcs {
 		svc.RegisterPb(s)
 	}
+	reflection.Register(s)
 
 	return &GrpcServer{
 		srv:  s,
