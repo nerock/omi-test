@@ -3,8 +3,10 @@ package api
 import (
 	"context"
 	"errors"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/nerock/omi-test/account/internal"
 	pb "github.com/nerock/omi-test/account/pb/account"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -31,4 +33,16 @@ func (a *AccountGrpcApi) UpdateAccount(ctx context.Context, req *pb.UpdateAccoun
 	}
 
 	return &pb.UpdateAccountResponse{Success: true}, nil
+}
+
+func (a *AccountGrpcApi) RegisterPb(s *grpc.Server) {
+	pb.RegisterAccountServer(s, a)
+}
+
+func (a *AccountGrpcApi) RegisterGateway(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	if err := pb.RegisterAccountHandler(ctx, mux, conn); err != nil {
+		return err
+	}
+
+	return nil
 }
