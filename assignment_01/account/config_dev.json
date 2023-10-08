@@ -1,7 +1,7 @@
 {
   "postgres": {
     "user": "postgres",
-    "password": "changeme",
+    "password": "postgres",
     "db": "account"
   },
   "server": {
