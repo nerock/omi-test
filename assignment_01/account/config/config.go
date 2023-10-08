@@ -12,6 +12,8 @@ type Config struct {
 	HttpPort      int    `json:"http_port"`
 	LogLevel      int    `json:"log_level"`
 	LogStackTrace bool   `json:"log_stacktrace"`
+	NatsUri       string `json:"nats_uri"`
+	NatsTopic     string `json:"nats_topic"`
 }
 
 func FromFile(path string) (Config, error) {

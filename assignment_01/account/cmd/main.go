@@ -5,6 +5,9 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/golang-migrate/migrate/v4"
+	"github.com/nats-io/nats.go"
+	"github.com/nats-io/nats.go/encoders/protobuf"
+	"github.com/nerock/omi-test/account/internal/interceptor"
 
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
@@ -51,9 +54,18 @@ func main() {
 		log.Fatal("could not run db migrations", zap.Error(err))
 	}
 
+	nc, err := nats.Connect(cfg.NatsUri)
+	if err != nil {
+		log.Fatal("could not connect to nats", zap.Error(err))
+	}
+	ec, err := nats.NewEncodedConn(nc, protobuf.PROTOBUF_ENCODER)
+	if err != nil {
+		log.Fatal("could not create proto encoded connection to nats", zap.Error(err))
+	}
+
 	st := storage.NewAccountPostgresStorage(db)
 	svc := internal.NewAccountService(st)
-	api := api.NewAccountGrpcApi(svc)
+	api := api.NewAccountGrpcApi(interceptor.NewAccountNatsInterceptor(svc, ec, cfg.NatsTopic, log))
 
 	srv := pkg.NewGrpcServer(cfg.GrpcPort, log, api)
 
