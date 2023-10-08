@@ -1,0 +1,15 @@
+{
+  "postgres": {
+    "user": "postgres",
+    "password": "changeme",
+    "db": "audit"
+  },
+  "log": {
+    "level": -1,
+    "stacktrace": false
+  },
+  "nats": {
+    "uri": "nats://127.0.0.1:4222",
+    "topic": "audit"
+  }
+}
