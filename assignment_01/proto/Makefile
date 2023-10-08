@@ -7,4 +7,4 @@ proto:
 		account.proto \
 		events.proto
 
-	@ cp -r ./pb/ ../account/
+	@ cp -r ./pb/ ../account/ && cp -r ./pb/ ../logger/
