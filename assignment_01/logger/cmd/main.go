@@ -35,8 +35,8 @@ func main() {
 	}
 
 	db, err := sql.Open("postgres",
-		fmt.Sprintf("postgres://%s:%s@localhost:5432/%s?sslmode=disable",
-			cfg.Postgres.User, cfg.Postgres.Password, cfg.Postgres.DB))
+		fmt.Sprintf("postgres://%s:%s@%s:5432/%s?sslmode=disable",
+			cfg.Postgres.User, cfg.Postgres.Password, cfg.Postgres.Host, cfg.Postgres.DB))
 	if err != nil {
 		log.Fatal("could not connect to postgres", zap.Error(err))
 	}

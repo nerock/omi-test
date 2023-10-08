@@ -30,6 +30,7 @@ func Subscribe(ctx context.Context, c *nats.Conn, topic string, svc AuditService
 			return
 		}
 
+		log.Debug("received audit log event", zap.Any("msg", data))
 		timeStamp, err := time.Parse(time.RFC3339, data.GetTimestamp())
 		if err != nil {
 			log.Error("could not parse timestamp", zap.Error(err))

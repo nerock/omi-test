@@ -13,6 +13,7 @@ type Config struct {
 }
 
 type PostgresConfig struct {
+	Host     string `json:"host"`
 	User     string `json:"user"`
 	Password string `json:"password"`
 	DB       string `json:"db"`

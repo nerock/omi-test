@@ -1,5 +1,6 @@
 {
   "postgres": {
+    "host": "postgres",
     "user": "postgres",
     "password": "postgres",
     "db": "audit"
@@ -9,7 +10,7 @@
     "stacktrace": false
   },
   "nats": {
-    "uri": "nats://127.0.0.1:4222",
+    "uri": "nats://nats:4222",
     "topic": "audit"
   }
 }

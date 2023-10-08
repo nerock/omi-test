@@ -1,7 +1,8 @@
 {
   "postgres": {
+    "host": "localhost",
     "user": "postgres",
-    "password": "changeme",
+    "password": "postgres",
     "db": "audit_test"
   }
 }
