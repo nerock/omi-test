@@ -14,10 +14,11 @@ message AuditEvent {
   string timestamp = 2;
   string user_ip = 3;
   oneof data {
-    AccountData account = 4;
+    AccountUpdatedData account = 4;
   }
 }
 
-message AccountData {
+message AccountUpdatedData {
   string account_id = 1;
+  string new_name = 2;
 }
