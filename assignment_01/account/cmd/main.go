@@ -58,10 +58,13 @@ func main() {
 	if err != nil {
 		log.Fatal("could not connect to nats", zap.Error(err))
 	}
+	defer nc.Close()
+
 	ec, err := nats.NewEncodedConn(nc, protobuf.PROTOBUF_ENCODER)
 	if err != nil {
 		log.Fatal("could not create proto encoded connection to nats", zap.Error(err))
 	}
+	defer ec.Close()
 
 	st := storage.NewAccountPostgresStorage(db)
 	svc := internal.NewAccountService(st)
