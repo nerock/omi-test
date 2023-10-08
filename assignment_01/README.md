@@ -1,3 +1,23 @@
+## Explanation
+As we talked about code generation from swagger and grpc I've chosen to use grpc with gateway (so it exposes the required rest api call).
+The idea is to make every dependency replaceable so the business operations do not know which kind of storage they use or that
+an event is sent when an account is updated. I added this in a custom middleware, another way to do it could be as a grpc interceptor but would allow
+less control (or if this operation is called in some other way in the future the event wouldn't be sent).
+
+The event itself it's also a proto message, using nats encoded client. This encoded client is useful to avoid parsing but limiting, as I didn't see
+a way to ack or nack an event, so I used the normal client on the receiver. The event uses protobuf "oneof" which is a way to have different kind
+of types (kind of generics) in a proto message, so we could add extra details for different audit logs (account created, deleted, etc...)
+
+The services can be built natively or with docker via the Makefiles or with docker compose.
+It will require to provide valid configs (the `config_dev.json` in each service are valid configs) as `config.json`. If not using compose
+the service names un the configs uris (postgres, nats), should be changed to `localhost` or whichever remote host.
+
+To run everything with docker compose also create a valid `.env`, the `.env_example` is a valid configuration that corresponds to
+`config_dev.json` in the services. The run with `docker compose -f docker-compose.nats.yaml -f docker-compose.services.yaml up`
+
+Finally, I've tried to complete all the bonus points, but couldn't do the jaeger part as I'm not too familiar tracing over events, so
+I couldn't find a simple way to send trace details over nats.
+
 ## Introduction
 
 This test aims at demonstrating your capacity to develop a service from scratch in Go, using both synchronous and asynchronous communication. We expect from your code to be:
