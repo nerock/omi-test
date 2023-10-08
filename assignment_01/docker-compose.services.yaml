@@ -1,0 +1,23 @@
+version: "3.5"
+services:
+  account-service:
+    build:
+      context: ./account
+      dockerfile: Dockerfile
+    ports:
+      - "50051:50051"
+      - "8080:8080"
+    networks:
+      - nats
+    restart: unless-stopped
+  audit-logger:
+    build:
+      context: ./logger
+      dockerfile: Dockerfile
+    networks:
+      - nats
+    restart: unless-stopped
+
+networks:
+  nats:
+    name: nats
