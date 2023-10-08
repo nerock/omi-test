@@ -2,6 +2,7 @@ package internal
 
 import (
 	"context"
+	"fmt"
 	"time"
 )
 
@@ -26,6 +27,9 @@ func NewAuditService(st Storage) *AuditService {
 }
 
 func (a *AuditService) AddLog(ctx context.Context, log AuditLog) error {
+	if err := a.st.SaveLog(ctx, log); err != nil {
+		return fmt.Errorf("could not add new audit log: %w", err)
+	}
 
 	return nil
 }
