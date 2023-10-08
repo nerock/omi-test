@@ -39,7 +39,7 @@ func (a *AccountNatsInterceptor) UpdateAccount(ctx context.Context, id, name str
 			EventType: event.EventType_ACCOUNT_UPDATED,
 			Timestamp: time.Now().Format(time.RFC3339),
 			UserIp:    ip,
-			AccountId: id,
+			Data:      &event.AuditEvent_Account{Account: &event.AccountData{AccountId: id}},
 		}); err != nil {
 			a.log.Error("could not send update account event", zap.Error(err))
 		}

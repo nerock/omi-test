@@ -13,5 +13,11 @@ message AuditEvent {
   EventType event_type = 1;
   string timestamp = 2;
   string user_ip = 3;
-  string account_id = 4;
+  oneof data {
+    AccountData account = 4;
+  }
+}
+
+message AccountData {
+  string account_id = 1;
 }
