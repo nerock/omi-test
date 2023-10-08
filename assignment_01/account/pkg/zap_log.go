@@ -1,13 +1,14 @@
 package pkg
 
 import (
+	"github.com/nerock/omi-test/account/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
-func NewZapLogger(lvl int, stackTrace bool) (*zap.Logger, error) {
+func NewZapLogger(cfg config.LogConfig) (*zap.Logger, error) {
 	return zap.Config{
-		Level: zap.NewAtomicLevelAt(zapcore.Level(lvl)),
+		Level: zap.NewAtomicLevelAt(zapcore.Level(cfg.Level)),
 		Sampling: &zap.SamplingConfig{
 			Initial:    100,
 			Thereafter: 100,
@@ -16,6 +17,6 @@ func NewZapLogger(lvl int, stackTrace bool) (*zap.Logger, error) {
 		EncoderConfig:     zap.NewProductionEncoderConfig(),
 		OutputPaths:       []string{"stderr"},
 		ErrorOutputPaths:  []string{"stderr"},
-		DisableStacktrace: !stackTrace,
+		DisableStacktrace: !cfg.StackTrace,
 	}.Build()
 }

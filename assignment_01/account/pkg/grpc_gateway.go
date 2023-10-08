@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/nerock/omi-test/account/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"net/http"
@@ -19,8 +20,8 @@ type GrpcGW struct {
 	gw   *http.Server
 }
 
-func NewGrpcGW(ctx context.Context, httpPort int, grpcPort int, svcs ...ServiceGW) (*GrpcGW, error) {
-	conn, err := grpc.DialContext(ctx, fmt.Sprintf(":%d", grpcPort),
+func NewGrpcGW(ctx context.Context, cfg config.ServerConfig, svcs ...ServiceGW) (*GrpcGW, error) {
+	conn, err := grpc.DialContext(ctx, fmt.Sprintf(":%d", cfg.GrpcPort),
 		grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, fmt.Errorf("connect to grpc server: %w", err)
@@ -37,7 +38,7 @@ func NewGrpcGW(ctx context.Context, httpPort int, grpcPort int, svcs ...ServiceG
 	}
 
 	srv := &http.Server{
-		Addr:    fmt.Sprintf(":%d", httpPort),
+		Addr:    fmt.Sprintf(":%d", cfg.HttpPort),
 		Handler: mux,
 	}
 

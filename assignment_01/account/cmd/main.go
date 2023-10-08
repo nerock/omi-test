@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/nats.go/encoders/protobuf"
@@ -33,12 +34,14 @@ func main() {
 		stdlog.Fatal("load config:", err)
 	}
 
-	log, err := pkg.NewZapLogger(cfg.LogLevel, cfg.LogStackTrace)
+	log, err := pkg.NewZapLogger(cfg.Log)
 	if err != nil {
 		stdlog.Fatal("could not load zap logger:", err)
 	}
 
-	db, err := sql.Open("postgres", cfg.PostgresURI)
+	db, err := sql.Open("postgres",
+		fmt.Sprintf("postgres://%s:%s@localhost:5432/%s?sslmode=disable",
+			cfg.Postgres.User, cfg.Postgres.Password, cfg.Postgres.DB))
 	if err != nil {
 		log.Fatal("could not connect to postgres", zap.Error(err))
 	}
@@ -54,7 +57,7 @@ func main() {
 		log.Fatal("could not run db migrations", zap.Error(err))
 	}
 
-	nc, err := nats.Connect(cfg.NatsUri)
+	nc, err := nats.Connect(cfg.Nats.Uri)
 	if err != nil {
 		log.Fatal("could not connect to nats", zap.Error(err))
 	}
@@ -68,11 +71,11 @@ func main() {
 
 	st := storage.NewAccountPostgresStorage(db)
 	svc := internal.NewAccountService(st)
-	api := api.NewAccountGrpcApi(interceptor.NewAccountNatsInterceptor(svc, ec, cfg.NatsTopic, log))
+	api := api.NewAccountGrpcApi(interceptor.NewAccountNatsInterceptor(svc, ec, cfg.Nats.Topic, log))
 
-	srv := pkg.NewGrpcServer(cfg.GrpcPort, log, api)
+	srv := pkg.NewGrpcServer(cfg.Server.GrpcPort, log, api)
 
-	gw, err := pkg.NewGrpcGW(ctx, cfg.HttpPort, cfg.GrpcPort, api)
+	gw, err := pkg.NewGrpcGW(ctx, cfg.Server, api)
 	if err != nil {
 		log.Fatal("could not setup grpc gateway", zap.Error(err))
 	}

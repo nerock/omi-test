@@ -7,13 +7,31 @@ import (
 )
 
 type Config struct {
-	PostgresURI   string `json:"postgres_uri"`
-	GrpcPort      int    `json:"grpc_port"`
-	HttpPort      int    `json:"http_port"`
-	LogLevel      int    `json:"log_level"`
-	LogStackTrace bool   `json:"log_stacktrace"`
-	NatsUri       string `json:"nats_uri"`
-	NatsTopic     string `json:"nats_topic"`
+	Postgres PostgresConfig `json:"postgres"`
+	Server   ServerConfig   `json:"server"`
+	Log      LogConfig      `json:"log"`
+	Nats     NatsConfig     `json:"nats"`
+}
+
+type PostgresConfig struct {
+	User     string `json:"user"`
+	Password string `json:"password"`
+	DB       string `json:"db"`
+}
+
+type ServerConfig struct {
+	GrpcPort int `json:"grpc_port"`
+	HttpPort int `json:"http_port"`
+}
+
+type LogConfig struct {
+	Level      int  `json:"level"`
+	StackTrace bool `json:"stacktrace"`
+}
+
+type NatsConfig struct {
+	Uri   string `json:"uri"`
+	Topic string `json:"topic"`
 }
 
 func FromFile(path string) (Config, error) {

@@ -1,9 +1,19 @@
 {
-  "postgres_uri": "postgres://postgres:changeme@localhost:5432/postgres?sslmode=disable",
-  "grpc_port": 50051,
-  "http_port": 8080,
-  "log_level": -1,
-  "log_stacktrace": false,
-  "nats_uri": "nats://127.0.0.1:4222",
-  "nats_topic": "audit"
+  "postgres": {
+    "user": "postgres",
+    "password": "changeme",
+    "db": "account"
+  },
+  "server": {
+    "grpc_port": 50051,
+    "http_port": 8080
+  },
+  "log": {
+    "level": -1,
+    "stacktrace": false
+  },
+  "nats": {
+    "uri": "nats://127.0.0.1:4222",
+    "topic": "audit"
+  }
 }
