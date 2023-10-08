@@ -15,6 +15,12 @@ the service names un the configs uris (postgres, nats), should be changed to `lo
 To run everything with docker compose also create a valid `.env`, the `.env_example` is a valid configuration that corresponds to
 `config_dev.json` in the services. The run with `docker compose -f docker-compose.nats.yaml -f docker-compose.services.yaml up`
 
+As stated, you can do the required http call, but you can also do the call through grpc,
+this can be done from postman importing the proto file or using server reflection (it's enabled).
+The proto files are built from the proto folder in a dirty way to avoid problems having to use `replace` directive with go modules.
+Usually I would either have them in it's own go module and import that module, or build them into the `pkg` package of the service
+which implements de server, and then the clients would import that.
+
 Finally, I've tried to complete all the bonus points, but couldn't do the jaeger part as I'm not too familiar tracing over events, so
 I couldn't find a simple way to send trace details over nats.
 
