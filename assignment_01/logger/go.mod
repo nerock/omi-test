@@ -3,6 +3,7 @@ module github.com/nerock/omi-test/logger
 go 1.21.1
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/golang-migrate/migrate/v4 v4.16.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.18.0
 	github.com/lib/pq v1.10.9
